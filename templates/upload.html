@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Upload de Extratos</title>
+
+    <!-- Bootstrap 5 CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+    
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .bank-card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            cursor: pointer;
+            height: 100%;
+        }
+        .bank-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .card-title {
+            font-weight: bold;
+        }
+        #response-container {
+            position: sticky;
+            top: 20px;
+        }
+        .response-content {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container mt-5">
+        <div class="p-4 mb-4 bg-light rounded-3">
+            <div class="container-fluid py-4">
+                <h1 class="display-5 fw-bold">Portal de Upload de Extratos</h1>
+                <p class="col-md-8 fs-4">Selecione um banco para fazer o upload do seu arquivo de extrato em PDF.</p>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <!-- Card Caixa Agrícola -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card bank-card h-100 shadow-sm" data-banco="caixa_agricola">
+                    <div class="card-body text-center">
+                        <i class="bi bi-bank2 display-4 text-primary"></i>
+                        <h5 class="card-title mt-3">Caixa Agrícola</h5>
+                        <p class="card-text">Envie seu extrato da Caixa Agrícola.</p>
+                        <div class="d-grid gap-2">
+                            <input type="file" class="form-control d-none" id="file-caixa_agricola" accept=".pdf">
+                            <button class="btn btn-primary upload-btn">Selecionar Arquivo</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card Millennium BCP -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card bank-card h-100 shadow-sm" data-banco="millennium_bcp">
+                    <div class="card-body text-center">
+                        <i class="bi bi-credit-card-2-back display-4 text-success"></i>
+                        <h5 class="card-title mt-3">Millennium BCP</h5>
+                        <p class="card-text">Envie seu extrato do Millennium BCP.</p>
+                        <div class="d-grid gap-2">
+                            <input type="file" class="form-control d-none" id="file-millennium_bcp" accept=".pdf">
+                            <button class="btn btn-success upload-btn">Selecionar Arquivo</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card Montepio -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card bank-card h-100 shadow-sm" data-banco="montepio">
+                    <div class="card-body text-center">
+                        <i class="bi bi-piggy-bank display-4 text-warning"></i>
+                        <h5 class="card-title mt-3">Montepio</h5>
+                        <p class="card-text">Envie seu extrato do Montepio.</p>
+                        <div class="d-grid gap-2">
+                            <input type="file" class="form-control d-none" id="file-montepio" accept=".pdf">
+                            <button class="btn btn-warning upload-btn">Selecionar Arquivo</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card Revolut -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card bank-card h-100 shadow-sm" data-banco="revolut">
+                    <div class="card-body text-center">
+                        <i class="bi bi-phone display-4 text-info"></i>
+                        <h5 class="card-title mt-3">Revolut</h5>
+                        <p class="card-text">Envie seu extrato da Revolut.</p>
+                        <div class="d-grid gap-2">
+                            <input type="file" class="form-control d-none" id="file-revolut" accept=".pdf">
+                            <button class="btn btn-info upload-btn">Selecionar Arquivo</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card Santander -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card bank-card h-100 shadow-sm" data-banco="santander">
+                    <div class="card-body text-center">
+                        <i class="bi bi-shield-check display-4 text-danger"></i>
+                        <h5 class="card-title mt-3">Santander</h5>
+                        <p class="card-text">Envie seu extrato do Santander.</p>
+                        <div class="d-grid gap-2">
+                            <input type="file" class="form-control d-none" id="file-santander" accept=".pdf">
+                            <button class="btn btn-danger upload-btn">Selecionar Arquivo</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div> <!-- End of row -->
+
+        <!-- Área de Resposta -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <div id="response-container" class="card shadow-sm">
+                    <div class="card-header">
+                        <h4>Resposta do Servidor</h4>
+                    </div>
+                    <div class="card-body">
+                        <div id="response-content" class="response-content">
+                            A resposta da API aparecerá aqui após o upload.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div> <!-- End of main container -->
+
+    <!-- Bootstrap 5 JS Bundle CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        const API_BASE_URL = 'https://api.pdinfinita.app/api';
+        const responseContent = document.getElementById('response-content');
+
+        document.querySelectorAll('.bank-card').forEach(card => {
+            const banco = card.dataset.banco;
+            const fileInput = document.getElementById(`file-${banco}`);
+            const uploadButton = card.querySelector('.upload-btn');
+
+            uploadButton.addEventListener('click', () => fileInput.click());
+
+            fileInput.addEventListener('change', event => {
+                const arquivo = event.target.files[0];
+                if (arquivo) uploadFile(banco, arquivo, uploadButton);
+            });
+        });
+
+        async function uploadFile(banco, arquivo, buttonElement) {
+
+            // Correção do endpoint:
+            // millennium_bcp → millennium
+            let apiBanco = banco;
+            if (banco === "millennium_bcp") {
+                apiBanco = "millennium";
+            }
+
+            const uploadUrl = `${API_BASE_URL}/${apiBanco}/upload/`;
+
+            const formData = new FormData();
+            formData.append('pdf', arquivo); // nome correto do campo no backend
+
+            const originalButtonText = buttonElement.innerHTML;
+            buttonElement.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Enviando...';
+            buttonElement.disabled = true;
+
+            responseContent.textContent = 'Enviando arquivo...';
+            responseContent.className = 'response-content text-muted';
+
+            try {
+                const response = await fetch(uploadUrl, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    responseContent.className = 'response-content text-success fw-bold';
+                    responseContent.textContent = `Sucesso! ${JSON.stringify(result, null, 2)}`;
+                } else {
+                    responseContent.className = 'response-content text-danger fw-bold';
+                    responseContent.textContent = `Erro ${response.status}: ${JSON.stringify(result, null, 2)}`;
+                }
+
+            } catch (error) {
+                responseContent.className = 'response-content text-danger fw-bold';
+                responseContent.textContent = `Erro de conexão: ${error.message}`;
+            }
+
+            buttonElement.innerHTML = originalButtonText;
+            buttonElement.disabled = false;
+        }
+    </script>
+</body>
+</html>

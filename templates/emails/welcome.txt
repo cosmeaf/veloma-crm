@@ -1,0 +1,17 @@
+Bem-vindo{{ ',' if user.first_name else '' }} {{ user.first_name|default:"" }}!
+
+Olá{{ ',' if user.first_name else '' }}!
+
+Sua conta foi criada com sucesso na nossa plataforma.
+
+Informações da conta:
+• Nome: {{ user.get_full_name|default:"Não informado" }}
+• E-mail: {{ user.email }}
+• Data de cadastro: {{ "now"|date:"d \\d\\e F \\d\\e Y" }}
+
+Você já pode acessar sua conta utilizando o e-mail acima.
+
+Caso não tenha solicitado este cadastro, por favor ignore esta mensagem.
+
+© {{ "now"|date:"Y" }} Veloma Contabilidade
+Precisa de ajuda? suporte@velomacontabilidade.com

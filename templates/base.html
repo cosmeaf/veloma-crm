@@ -1,0 +1,43 @@
+{% extends "base.html" %} <!-- Você pode criar um base.html simples -->
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h4>Dados Extraídos: {{ extrato.banco.nome }}</h4>
+            <a href="{% url 'gerar_excel' extrato.id %}" class="btn btn-success">
+                <i class="bi bi-download"></i> Baixar Excel
+            </a>
+        </div>
+        <div class="card-body">
+            <p><strong>Extrato ID:</strong> {{ extrato.id }}</p>
+            <p><strong>Período:</strong> {{ extrato.data_upload|date:"d/m/Y" }}</p>
+            <hr>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Data Mov.</th>
+                        <th>Data Valor</th>
+                        <th>Descrição</th>
+                        <th>Débito</th>
+                        <th>Crédito</th>
+                        <th>Saldo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for mov in movimentos %}
+                    <tr>
+                        <td>{{ mov.data_movimento|date:"d/m/Y" }}</td>
+                        <td>{{ mov.data_valor|date:"d/m/Y" }}</td>
+                        <td>{{ mov.descricao }}</td>
+                        <td>{% if mov.debito %}€{{ mov.debito|floatformat:2 }}{% endif %}</td>
+                        <td>{% if mov.credito %}€{{ mov.credito|floatformat:2 }}{% endif %}</td>
+                        <td>€{{ mov.saldo|floatformat:2 }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

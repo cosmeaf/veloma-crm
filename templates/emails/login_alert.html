@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novo Login Detectado</title>
+    <style>
+        /* RESET & BASE */
+        body { 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            background-color: #f1f5f9; 
+            margin: 0; 
+            padding: 0; 
+            color: #334155; 
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        /* CONTAINER */
+        .email-wrapper {
+            background-color: #ffffff;
+            max-width: 600px;
+            margin: 40px auto;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+        }
+
+        /* HEADER DE SEGURANÇA */
+        .header { 
+            background-color: #334155; 
+            padding: 35px 20px; 
+            text-align: center; 
+        }
+        .icon-wrapper {
+            background-color: #f59e0b; /* Laranja de alerta */
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .icon {
+            color: #ffffff;
+            font-size: 30px;
+            line-height: 1;
+        }
+        .header h1 { 
+            margin: 0; 
+            color: #ffffff; 
+            font-size: 24px; 
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        /* CONTEÚDO */
+        .content { padding: 40px 30px; text-align: left; }
+        .content p { 
+            font-size: 16px; 
+            line-height: 1.7; 
+            color: #475569; 
+            margin: 0 0 25px; 
+            text-align: center; /* Texto introdutório centralizado */
+        }
+        
+        /* PAINEL DE DADOS */
+        .data-panel {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-left: 4px solid #f59e0b;
+            border-radius: 6px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        .data-row {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .data-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        .data-label {
+            display: block;
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #64748b;
+            font-weight: 700;
+            margin-bottom: 4px;
+            letter-spacing: 0.5px;
+        }
+        .data-value {
+            font-size: 15px;
+            color: #0f172a;
+            font-weight: 500;
+            word-break: break-word; /* Quebra linha em textos longos */
+        }
+
+        /* ALERTA DE SEGURANÇA */
+        .security-alert {
+            background-color: #fff7ed;
+            color: #9a3412;
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 14px;
+            border: 1px solid #ffedd5;
+            margin-top: 30px;
+        }
+
+        /* FOOTER */
+        .footer { 
+            background-color: #f1f5f9; 
+            padding: 30px 20px; 
+            text-align: center; 
+            border-top: 1px solid #e2e8f0; 
+            font-size: 12px; 
+            color: #94a3b8; 
+        }
+
+        @media (max-width: 600px) {
+            .email-wrapper { width: 100% !important; margin: 0 !important; border-radius: 0 !important; border: none; }
+            .content { padding: 30px 20px !important; }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-wrapper">
+        <!-- HEADER -->
+        <div class="header">
+            <div class="icon-wrapper">
+                <!-- Ícone de Cadeado -->
+                <span class="icon">&#128274;</span>
+            </div>
+            <h1>Novo Login Detectado</h1>
+        </div>
+
+        <!-- CORPO -->
+        <div class="content">
+            <p>Olá, <strong>{{ first_name }}</strong>.</p>
+            <p>Detectamos um novo login na sua conta na plataforma Veloma. Aqui estão os detalhes desse acesso:</p>
+
+            <div class="data-panel">
+                <div class="data-row">
+                    <span class="data-label">E-mail Utilizado</span>
+                    <div class="data-value">{{ email }}</div>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">Endereço IP</span>
+                    <div class="data-value">{{ ip }}</div>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">Dispositivo / Navegador</span>
+                    <div class="data-value">{{ user_agent }}</div>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">Data e Hora</span>
+                    <div class="data-value">{{ when }}</div>
+                </div>
+            </div>
+
+            <p style="margin-bottom: 0;">Se foi você, não é necessária nenhuma ação adicional.</p>
+
+            <div class="security-alert">
+                <strong>Não reconhece este acesso?</strong><br>
+                Entre em contato com o suporte imediatamente para proteger sua conta.
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            <p>&copy; {{ year }} Veloma Contabilidade. Todos os direitos reservados.</p>
+            <p>Mensagem automática de segurança. Por favor, não responda.</p>
+        </div>
+    </div>
+</body>
+</html>

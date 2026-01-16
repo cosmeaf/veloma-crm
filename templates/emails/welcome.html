@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Bem-vindo à Veloma</title>
+    <style>
+        /* RESET & BASE */
+        body { 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            background-color: #f1f5f9; 
+            margin: 0; 
+            padding: 0; 
+            color: #334155; 
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        /* CONTAINER PRINCIPAL (O CARD) */
+        .email-wrapper {
+            background-color: #ffffff;
+            max-width: 600px;
+            margin: 40px auto;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e2e8f0;
+        }
+
+        /* HEADER */
+        .header { 
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%); 
+            padding: 40px 20px; 
+            text-align: center; 
+            color: #ffffff;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            display: block;
+        }
+        .header h1 { 
+            margin: 0; 
+            color: #ffffff; 
+            font-size: 26px; 
+            font-weight: 600; 
+        }
+        .header p { 
+            margin: 10px 0 0; 
+            color: #cbd5e1; 
+            font-size: 15px; 
+        }
+
+        /* CONTEÚDO PRINCIPAL */
+        .content { padding: 50px 40px; text-align: center; }
+        .content h2 { 
+            font-size: 22px; 
+            color: #0f172a; 
+            margin: 0 0 20px; 
+            font-weight: 600;
+        }
+        .content p { 
+            font-size: 16px; 
+            line-height: 1.7; 
+            color: #475569; 
+            margin: 0 0 25px; 
+        }
+
+        /* CAIXA DE DADOS DO USUÁRIO */
+        .data-box {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 25px;
+            margin: 35px auto;
+            text-align: left;
+            max-width: 480px;
+        }
+        .data-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+            margin-bottom: 0;
+        }
+        .data-item:last-child { border-bottom: none; }
+        .data-label {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #64748b;
+            font-weight: 600;
+        }
+        .data-value {
+            font-size: 15px;
+            color: #0f172a;
+            font-weight: 500;
+            text-align: right;
+        }
+
+        /* FOOTER */
+        .footer { 
+            background-color: #f1f5f9; 
+            padding: 30px 20px; 
+            text-align: center; 
+            border-top: 1px solid #e2e8f0; 
+        }
+        .footer p { 
+            margin: 0 0 10px; 
+            font-size: 13px; 
+            color: #64748b; 
+        }
+        .footer a { color: #334155; text-decoration: none; font-weight: 500; }
+        .footer a:hover { text-decoration: underline; }
+        .legal { font-size: 11px; color: #94a3b8; margin-top: 20px; }
+
+        /* RESPONSIVIDADE */
+        @media only screen and (max-width: 600px) {
+            .email-wrapper { width: 100% !important; margin: 0 !important; border-radius: 0 !important; border: none; }
+            .content { padding: 40px 25px !important; }
+            .data-item { flex-direction: column; gap: 5px; text-align: left; }
+            .data-value { text-align: left; }
+            .header h1 { font-size: 22px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-wrapper">
+        <!-- HEADER -->
+        <div class="header">
+            <span class="logo">VELOMA</span>
+            <h1>Bem-vindo{% if user.first_name %}, {{ user.first_name }}{% endif %}!</h1>
+            <p>Sua conta está pronta para uso</p>
+        </div>
+
+        <!-- CORPO DO E-MAIL -->
+        <div class="content">
+            <h2>Cadastro Confirmado com Sucesso</h2>
+            
+            <p>
+                Preparamos nossa plataforma para recebê-lo. Agora você faz parte da comunidade <strong>Veloma Contabilidade</strong>.
+                Abaixo estão os detalhes da sua nova conta para fins de registro:
+            </p>
+
+            <div class="data-box">
+                <div class="data-item">
+                    <span class="data-label">Nome Completo</span>
+                    <span class="data-value">{{ user.first_name }} {{ user.last_name }}</span>
+                </div>
+                <div class="data-item">
+                    <span class="data-label">E-mail de Acesso</span>
+                    <span class="data-value">{{ user.email }}</span>
+                </div>
+                <div class="data-item">
+                    <span class="data-label">Data de Cadastro</span>
+                    <span class="data-value">{% now "j \d\e F \d\e Y" %}</span>
+                </div>
+            </div>
+
+            <p>
+                Para garantir a segurança da sua conta, sugerimos que acesse o painel e verifique suas configurações de perfil.
+            </p>
+
+            <p style="font-size: 13px; color: #94a3b8; margin-top: 30px;">
+                Se você não solicitou este cadastro, por favor desconsidere este e-mail.
+            </p>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            <p>&copy; {% now "Y" %} Veloma Contabilidade. Todos os direitos reservados.</p>
+            <p>Entre em contato: <a href="mailto:suporte@velomacontabilidade.com">suporte@velomacontabilidade.com</a></p>
+            
+            <div class="legal">
+                Esta é uma mensagem automática. Por favor, não responda diretamente a este e-mail.
+            </div>
+        </div>
+    </div>
+</body>
+</html>

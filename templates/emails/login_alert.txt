@@ -1,0 +1,14 @@
+Alerta de login
+
+Olá {{ first_name }},
+
+Detectamos um novo login na sua conta ({{ email }}).
+
+Data/Hora: {{ when }}
+IP: {{ ip }}
+Local: {{ city }} {{ region }} {{ country }}
+Navegador: {{ user_agent }}
+
+Se não foi você, altere sua senha imediatamente.
+
+{{ year }} Veloma Contabilidade
