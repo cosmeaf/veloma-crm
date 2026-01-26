@@ -1,0 +1,183 @@
+{% extends "base.html" %} 
+{# Certifique-se de ter um base.html com links do Bootstrap 5 #}
+
+{% block content %}
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-primary"><i class="bi bi-file-earmark-spreadsheet"></i> Meus Extratos</h2>
+        <button type="button" class="btn btn-outline-primary" onclick="location.reload()">
+            <i class="bi bi-arrow-clockwise"></i> Atualizar
+        </button>
+    </div>
+
+    <!-- Área de Upload -->
+    <div class="card mb-5 shadow-sm">
+        <div class="card-header bg-white">
+            <h5 class="mb-0">Novo Upload</h5>
+        </div>
+        <div class="card-body">
+            <form id="uploadForm" class="row g-3">
+                <div class="col-md-10">
+                    <input type="file" class="form-control" id="pdfFile" accept=".pdf" required>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-upload"></i> Enviar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Tabela de Extratos -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-white">
+            <h5 class="mb-0">Histórico de Processamento</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0 align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Banco</th>
+                            <th>Data de Envio</th>
+                            <th>Status</th>
+                            <th class="text-end">Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for extraction in extractions %}
+                        <tr>
+                            <td>
+                                <strong>{{ extraction.bank_code|default:"Identificando..." }}</strong>
+                            </td>
+                            <td>{{ extraction.created_at|date:"d/m/Y H:i" }}</td>
+                            <td>
+                                <!-- BADGES VISUAIS -->
+                                {% if extraction.status == 'PENDING' %}
+                                    <span class="badge bg-warning text-dark">
+                                        <i class="bi bi-hourglass-split"></i> Pendente
+                                    </span>
+                                {% elif extraction.status == 'PROCESSING' %}
+                                    <span class="badge bg-info text-dark">
+                                        <i class="bi bi-cpu"></i> Processando...
+                                    </span>
+                                {% elif extraction.status == 'SUCCESS' %}
+                                    <span class="badge bg-success">
+                                        <i class="bi bi-check-circle"></i> Concluído
+                                    </span>
+                                {% elif extraction.status == 'ERROR' %}
+                                    <span class="badge bg-danger">
+                                        <i class="bi bi-exclamation-triangle"></i> Erro
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td class="text-end">
+                                <!-- BOTÕES DE AÇÃO -->
+                                {% if extraction.status == 'SUCCESS' and extraction.result_excel %}
+                                    <a href="{{ extraction.result_excel.url }}" 
+                                       class="btn btn-sm btn-success"
+                                       download>
+                                        <i class="bi bi-file-earmark-excel"></i> Baixar Excel
+                                    </a>
+                                {% elif extraction.status == 'ERROR' %}
+                                    <button type="button" class="btn btn-sm btn-danger" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#errorModal{{ extraction.id }}">
+                                        <i class="bi bi-eye"></i> Ver Erro
+                                    </button>
+                                {% else %}
+                                    <span class="text-muted small">Aguardando...</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center py-4 text-muted">
+                                Nenhum extrato enviado ainda.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAIS DE ERRO -->
+{% for extraction in extractions %}
+    {% if extraction.status == 'ERROR' %}
+    <div class="modal fade" id="errorModal{{ extraction.id }}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">Erro no Processamento</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Mensagem:</strong></p>
+                    <pre class="bg-light p-3 border rounded text-danger">{{ extraction.error_message }}</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+{% endfor %}
+
+<script>
+    document.getElementById('uploadForm').addEventListener('submit', function(e) {
+        e.preventDefault(); // Impede o reload da página
+
+        const fileInput = document.getElementById('pdfFile');
+        const formData = new FormData();
+        formData.append('file', fileInput.files[0]);
+
+        // Feedback visual (botão desabilitado)
+        const btn = this.querySelector('button[type="submit"]');
+        const originalText = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = 'Enviando...';
+
+        // Chamada API
+        fetch('/api/extractor/upload/', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken') // Precisa pegar o token se não usar API Key
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert('Arquivo enviado com sucesso! A tabela será atualizada.');
+            location.reload(); // Recarrega a página para mostrar o novo status
+        })
+        .catch(error => {
+            alert('Erro ao enviar arquivo.');
+            console.error('Error:', error);
+        })
+        .finally(() => {
+            btn.disabled = false;
+            btn.innerHTML = originalText;
+        });
+    });
+
+    // Helper para pegar CSRF Token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
+
+{% endblock %}

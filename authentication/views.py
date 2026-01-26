@@ -1,4 +1,4 @@
-# authentication/views.py (ou onde estiver)
+# authentication/views.py
 from rest_framework import viewsets, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -52,8 +52,15 @@ class OtpVerifyViewSet(viewsets.ViewSet):
     def create(self, request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
+
+        validated_data = serializer.validated_data
+
         return Response(
-            {"detail": "Código verificado com sucesso.", "reset_url": serializer.validated_data["reset_url"]},
+            {
+                "detail": "Código verificado com sucesso. Use o token para redefinir a senha.",
+                "reset_token": validated_data["reset_token"],
+                "expires_in": validated_data.get("expires_in", 3600),
+            },
             status=status.HTTP_200_OK,
         )
 

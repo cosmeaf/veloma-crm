@@ -147,19 +147,18 @@
 
             <div class="data-box">
                 <div class="data-item">
-                    <span class="data-label">Nome Completo</span>
-                    <span class="data-value">{{ user.first_name }} {{ user.last_name }}</span>
+                    <span class="data-label">Nome Completo: </span>
+                    <span class="data-value">{{ user.first_name|default:"" }} {{ user.last_name|default:"" }}</span>
                 </div>
                 <div class="data-item">
-                    <span class="data-label">E-mail de Acesso</span>
+                    <span class="data-label">E-mail de Acesso: </span>
                     <span class="data-value">{{ user.email }}</span>
                 </div>
                 <div class="data-item">
-                    <span class="data-label">Data de Cadastro</span>
+                    <span class="data-label">Data de Cadastro: </span>
                     <span class="data-value">{% now "j \d\e F \d\e Y" %}</span>
                 </div>
             </div>
-
             <p>
                 Para garantir a segurança da sua conta, sugerimos que acesse o painel e verifique suas configurações de perfil.
             </p>

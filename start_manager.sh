@@ -9,7 +9,7 @@ set -euo pipefail
 SCRIPT_PATH="${BASH_SOURCE[0]}"
 SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_PATH")" && pwd)"
 APP_DIR="${APP_DIR:-$SCRIPT_DIR}"
-VENV_DIR="${VENV_DIR:-$APP_DIR/.venv}"
+VENV_DIR="${VENV_DIR:-$APP_DIR/venv}"
 LOG_DIR="${LOG_DIR:-$APP_DIR/logs}"
 LOG_FILE="${LOG_FILE:-$LOG_DIR/manager.log}"
 

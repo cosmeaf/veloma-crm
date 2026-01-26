@@ -16,28 +16,25 @@ def healthcheck(request):
 urlpatterns = [
     path("admin/", admin.site.urls),
     # Schema OpenAPI
-    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
+    path("api/v1/schema/", SpectacularAPIView.as_view(), name="schema"),
 
     # Swagger UI
     path(
-        "api/docs/",
+        "api/v1/docs/",
         SpectacularSwaggerView.as_view(url_name="schema"),
         name="swagger-ui",
     ),
 
     # Redoc
     path(
-        "api/redoc/",
+        "api/v1/redoc/",
         SpectacularRedocView.as_view(url_name="schema"),
         name="redoc",
     ),
     path("api-auth/", include("rest_framework.urls")),
-    path("api/", include("api.urls.millennium_urls")),
     path("api/v1/auth/", include("authentication.urls")),
     path("api/v1/user-profile/", include("user_profile.urls")),
-
-    path("", include("app.urls")),
-
+    path('api/v1/converter/', include('converter.urls')),
     path("health/", healthcheck),
 ]
 
