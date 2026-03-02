@@ -1,6 +1,7 @@
 import hashlib
 from rest_framework import serializers
 from converter.models.millenium_model import MilleniumFile
+from converter.models.millenium_model import MilleniumExtraction
 
 
 class MilleniumFileSerializer(serializers.ModelSerializer):
@@ -76,3 +77,9 @@ class MilleniumFileSerializerDetails(serializers.ModelSerializer):
         if request:
             return request.build_absolute_uri(obj.file.url)
         return obj.file.url
+
+
+class MilleniumExtractionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MilleniumExtraction
+        fields = "__all__"

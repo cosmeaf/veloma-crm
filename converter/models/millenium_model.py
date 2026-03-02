@@ -22,3 +22,16 @@ class MilleniumFile(models.Model):
     class Meta:
         verbose_name = "Millenium PDF"
         verbose_name_plural = "Millenium PDFs"
+
+
+class MilleniumExtraction(models.Model):
+    """
+    APENAS CONTROLE DA EXTRAÇÃO
+    Não interfere no fluxo atual
+    """
+
+    uuid = models.UUIDField(primary_key=True)
+    source_pdf = models.CharField(max_length=512)
+    extracted_file = models.CharField(max_length=512, null=True, blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
